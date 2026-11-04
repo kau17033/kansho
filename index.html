@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>関証 KANSHO｜検証基盤 — 顧客に示せる、検証可能な物差しを。</title>
+<meta name="description" content="関証 KANSHO は、仕入れ・採算の検証結果を、取引先や金融機関に提出できる署名つき文書として発行する検証基盤です。費用6項目の判定、改ざん検出可能な記録、継続監査。">
+<style>
+  :root{
+    --slate:#334155; --slate-dark:#1E293B; --blue:#2563EB; --blue-dark:#1D4ED8;
+    --bg:#F8FAFC; --surface:#FFFFFF; --line:#E2E8F0; --text:#0F172A; --muted:#64748B;
+    --ok:#16A34A; --warn:#DC2626;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px;}
+  header{border-bottom:3px solid var(--slate);background:var(--surface);}
+  .head-in{display:flex;align-items:baseline;gap:14px;padding:18px 0;}
+  .logo{font-size:26px;font-weight:800;letter-spacing:.14em;color:var(--slate-dark);}
+  .logo span{color:var(--blue);}
+  .head-tag{font-size:12px;color:var(--muted);letter-spacing:.08em;}
+  .hero{padding:56px 0 40px;}
+  .hero .kicker{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.2em;margin-bottom:14px;}
+  .hero h1{font-size:32px;line-height:1.5;font-weight:800;color:var(--slate-dark);margin-bottom:18px;}
+  .hero p{font-size:16px;color:var(--slate);max-width:720px;}
+  section{padding:34px 0;border-top:1px solid var(--line);}
+  h2{font-size:20px;font-weight:800;color:var(--slate-dark);margin-bottom:16px;padding-left:12px;border-left:4px solid var(--blue);}
+  h3{font-size:16px;font-weight:700;color:var(--slate-dark);margin-bottom:6px;}
+  p,li{font-size:15px;color:var(--slate);}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--blue);padding:20px;}
+  .card .num{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.15em;margin-bottom:8px;}
+  ol.items{list-style:none;counter-reset:item;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;}
+  ol.items li{background:var(--surface);border:1px solid var(--line);padding:12px 16px;font-weight:600;color:var(--slate-dark);}
+  ol.items li::before{counter-increment:item;content:counter(item,decimal-leading-zero);color:var(--blue);font-weight:800;margin-right:10px;}
+  table{width:100%;border-collapse:collapse;background:var(--surface);font-size:15px;}
+  th,td{border:1px solid var(--line);padding:10px 14px;text-align:right;font-variant-numeric:tabular-nums;}
+  th:first-child,td:first-child{text-align:left;}
+  thead th{background:var(--slate);color:#fff;font-weight:700;}
+  tr.total td{font-weight:800;background:#EFF6FF;}
+  .verdict{display:inline-block;margin-top:14px;padding:8px 18px;background:var(--slate-dark);color:#fff;font-weight:700;font-size:15px;}
+  .verdict b{color:#93C5FD;}
+  .price-box{background:var(--surface);border:1px solid var(--line);padding:20px;margin-bottom:12px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;}
+  .price-box .amt{font-size:24px;font-weight:800;color:var(--slate-dark);font-variant-numeric:tabular-nums;}
+  .steps{list-style:none;}
+  .steps li{padding:12px 0;border-bottom:1px dashed var(--line);}
+  .steps li:last-child{border-bottom:none;}
+  .steps b{color:var(--slate-dark);}
+  .note{font-size:13px;color:var(--muted);}
+  .limit{background:#FFF7ED;border:1px solid #FED7AA;padding:16px 20px;font-size:14px;color:#7C2D12;}
+  .cta-area{text-align:center;padding:40px 0 8px;}
+  .cta{display:inline-block;background:var(--blue);color:#fff;font-weight:700;font-size:17px;padding:16px 42px;text-decoration:none;border-radius:2px;}
+  .cta:hover{background:var(--blue-dark);}
+  footer{border-top:1px solid var(--line);padding:24px 0 40px;margin-top:24px;}
+  footer p{font-size:12px;color:var(--muted);}
+  @media (max-width:600px){ .hero h1{font-size:25px;} .logo{font-size:22px;} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head-in">
+    <div class="logo">関証 <span>KANSHO</span></div>
+    <div class="head-tag">検証基盤</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker">VERIFICATION INFRASTRUCTURE</div>
+    <h1>顧客に示せる、検証可能な物差しを。</h1>
+    <p>関証は、仕入れと採算の判定を、勘や経験ではなく共通の物差しで行い、その結果を<strong>取引先や金融機関に提出できる署名つきの文書</strong>として発行する検証基盤です。EC支援事業者・卸・物流など、「自社の顧客に対して、根拠を示して説明しなければならない」組織のための基盤です。</p>
+  </div>
+
+  <section>
+    <h2>提供物</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="num">01</div>
+        <h3>検証文書の発行</h3>
+        <p>商品ごとに、費用の6項目すべてで採算を判定し、判定と根拠の内訳を署名つき記録として発行します。顧客や取引先への提出資料としてそのまま使えます。</p>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <h3>継続監査</h3>
+        <p>仕入れが続く限り、判定を定期的に反復し、記録を時系列で保管します。価格や送料が変われば、前回との差分も含めて再判定します。</p>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <h3>クライアント提示用の証明</h3>
+        <p>御社の顧客は、御社の名前で証明を受け取ります。証明は受け取った側が独立に検証でき、発行者への問い合わせなしに真偽を確認できます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>検証の方法</h2>
+    <p style="margin-bottom:14px;">判定に入れる費用は、次の6項目です。1つでも欠けた計算は「利益が出た」ことにしません。</p>
+    <ol class="items">
+      <li>販売価格</li>
+      <li>原価（仕入れ）</li>
+      <li>送料</li>
+      <li>販売手数料</li>
+      <li>返品に備える分</li>
+      <li>その他の変動費</li>
+    </ol>
+    <p style="margin-top:14px;">判定は3つだけです。<strong>候補</strong>（条件を満たす）／ <strong>保留</strong>（材料不足・条件未達）／ <strong>却下</strong>（利益が残らない）。発行された記録には署名が付き、後からの書き換えは検出できます。検証は誰でも独立に行えます（検証者に依存しない検証）。</p>
+
+    <h3 style="margin-top:26px;">計算例（コードレス掃除機）</h3>
+    <table>
+      <thead><tr><th>項目</th><th>金額</th></tr></thead>
+      <tbody>
+        <tr><td>販売価格</td><td>¥24,800</td></tr>
+        <tr><td>原価</td><td>¥14,900</td></tr>
+        <tr><td>送料</td><td>¥1,480</td></tr>
+        <tr><td>販売手数料</td><td>¥1,240</td></tr>
+        <tr><td>返品に備える分</td><td>¥900</td></tr>
+        <tr><td>その他の変動費</td><td>¥360</td></tr>
+        <tr class="total"><td>費用合計</td><td>¥18,880</td></tr>
+        <tr class="total"><td>1件あたり利益</td><td>¥5,920</td></tr>
+      </tbody>
+    </table>
+    <div class="verdict">判定： <b>候補</b> — 6項目すべてを入れても利益が残り、条件を満たす</div>
+    <p class="note" style="margin-top:10px;">※ これは計算の仕組みを示すための計算例であり、実在の顧客の結果ではありません。</p>
+  </section>
+
+  <section>
+    <h2>価格（検証中の設定）</h2>
+    <div class="price-box">
+      <div>
+        <h3>導入パイロット</h3>
+        <p>小規模な試験導入。対象を絞って検証文書の発行を実際に行い、進み方と文書の形を確認いただきます。</p>
+      </div>
+      <div class="amt">¥100,000〜</div>
+    </div>
+    <div class="price-box">
+      <div>
+        <h3>継続監査・基盤契約</h3>
+        <p>反復する仕入れ判定と記録保管を、月額の継続契約で提供します。範囲と件数に応じて個別にご案内します。</p>
+      </div>
+      <div class="amt">月額 相談</div>
+    </div>
+    <p class="note">※ 価格は検証中の設定です。正式な金額は、対象範囲を確認したうえで個別にお見積もりします。</p>
+  </section>
+
+  <section>
+    <h2>進み方</h2>
+    <ol class="steps">
+      <li><b>1. ご相談</b> — 検証したい商品・取引の概要をお聞きします（下記の相談フォーム）。</li>
+      <li><b>2. 導入パイロット</b> — 小規模に対象を絞り、検証文書の発行までを実際に体験いただきます。</li>
+      <li><b>3. 継続契約</b> — 判定の反復と記録の保管を、継続監査として運用に組み込みます。</li>
+    </ol>
+    <div class="cta-area">
+      <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdlsHeNXo6LBiCGHZb7pYVwnbxV2N4n_lHIW-KLTbHXXKrkWQ/viewform">検証文書・継続監査のご相談はこちら</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>検証の限界について（正直な限定）</h2>
+    <div class="limit">
+      関証が保証するのは、発行された記録の同一性です。署名により、記録が発行後に書き換えられていないことを検出できます。ただし署名は、将来の売上や利益を保証するものではありません。判定は「この計算で、この条件で通した／通さなかった」という証拠を示すものであり、利益の保証、販売の代行は行いません。
+    </div>
+  </section>
+
+  <footer>
+    <p>関証 KANSHO は、仕入れ・採算の検証と記録のための基盤です。売上の保証、仕入れや販売の代行は行いません。</p>
+  </footer>
+</div>
+</body>
+</html>
