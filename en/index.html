@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KANSHO — Verification Infrastructure | A verifiable standard your clients can check</title>
+<meta name="description" content="KANSHO verifies product profitability calculations across six cost items and issues the verdict and its breakdown as a signed document you can present to clients, suppliers, and lenders.">
+<style>
+  :root{
+    --slate:#334155;
+    --slate-dark:#1e293b;
+    --steel:#2563EB;
+    --steel-dark:#1d4ed8;
+    --ink:#0f172a;
+    --body:#475569;
+    --line:#e2e8f0;
+    --bg:#ffffff;
+    --bg-soft:#f8fafc;
+    --bg-band:#f1f5f9;
+    --green:#16a34a;
+    --amber:#b45309;
+    --red:#b91c1c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--body);
+    background:var(--bg);
+    line-height:1.7;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3{color:var(--ink);line-height:1.3;font-weight:700;}
+  h2{font-size:1.65rem;margin-bottom:14px;letter-spacing:-0.01em;}
+  h3{font-size:1.12rem;margin-bottom:8px;}
+  p{margin-bottom:14px;}
+  section{padding:64px 0;}
+  .band{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-size:.78rem;font-weight:700;letter-spacing:.18em;
+    color:var(--steel);text-transform:uppercase;margin-bottom:14px;
+  }
+  /* Header */
+  header{
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;background:var(--bg);z-index:10;
+  }
+  .header-in{display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .logo{font-weight:800;color:var(--slate-dark);font-size:1.15rem;letter-spacing:.04em;text-decoration:none;}
+  .logo span{color:var(--steel);}
+  .header-in nav a{
+    color:var(--slate);text-decoration:none;font-size:.92rem;font-weight:600;margin-left:26px;
+  }
+  .header-in nav a:hover{color:var(--steel);}
+  /* Hero */
+  .hero{padding:84px 0 72px;}
+  .hero h1{font-size:2.5rem;letter-spacing:-0.02em;margin-bottom:20px;max-width:640px;}
+  .hero h1 .accent{color:var(--steel);}
+  .hero .lead{font-size:1.12rem;max-width:660px;margin-bottom:32px;}
+  .btn{
+    display:inline-block;background:var(--steel);color:#fff;text-decoration:none;
+    font-weight:700;padding:13px 28px;border-radius:6px;font-size:1rem;
+  }
+  .btn:hover{background:var(--steel-dark);}
+  .btn.sub{
+    background:transparent;color:var(--steel);border:1.5px solid var(--steel);margin-left:12px;
+  }
+  .btn.sub:hover{background:var(--bg-band);}
+  /* Cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px;}
+  .card{
+    border:1px solid var(--line);border-radius:8px;padding:26px 24px;background:#fff;
+  }
+  .card .num{
+    font-size:.85rem;font-weight:800;color:var(--steel);letter-spacing:.1em;margin-bottom:12px;
+  }
+  .card p{margin-bottom:0;font-size:.96rem;}
+  /* Method */
+  .six{list-style:none;counter-reset:item;margin:28px 0 8px;}
+  .six li{
+    counter-increment:item;display:flex;align-items:baseline;gap:16px;
+    padding:13px 4px;border-bottom:1px solid var(--line);color:var(--ink);font-weight:600;
+  }
+  .six li:first-child{border-top:1px solid var(--line);}
+  .six li::before{
+    content:counter(item,decimal-leading-zero);
+    font-weight:800;color:var(--steel);font-size:.9rem;min-width:28px;
+  }
+  .six li .note{font-weight:400;color:var(--body);font-size:.93rem;}
+  .verdicts{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 6px;}
+  .verdict{
+    flex:1;min-width:200px;border:1px solid var(--line);border-radius:8px;padding:18px 20px;background:#fff;
+  }
+  .verdict .v-name{font-weight:800;font-size:1.02rem;margin-bottom:4px;}
+  .verdict .v-desc{font-size:.92rem;margin:0;}
+  .v-candidate .v-name{color:var(--green);}
+  .v-hold .v-name{color:var(--amber);}
+  .v-reject .v-name{color:var(--red);}
+  /* Examples */
+  .example{
+    border:1px solid var(--line);border-radius:8px;background:#fff;
+    padding:28px;margin-top:24px;
+  }
+  .example h3{margin-bottom:16px;}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
+  table th,table td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);font-size:.97rem;}
+  table td:last-child,table th:last-child{text-align:right;white-space:nowrap;}
+  table tr.total td{font-weight:700;color:var(--ink);border-top:2px solid var(--slate);}
+  table tr.profit td{font-weight:800;color:var(--ink);font-size:1.03rem;}
+  .verdict-line{margin-top:18px;padding:14px 18px;border-radius:6px;background:var(--bg-band);color:var(--ink);}
+  .verdict-line strong{font-weight:800;}
+  .fineprint{font-size:.85rem;color:#64748b;margin-top:12px;}
+  /* Pricing */
+  .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px;}
+  .price{
+    border:1px solid var(--line);border-radius:8px;padding:28px 24px;background:#fff;
+    display:flex;flex-direction:column;
+  }
+  .price h3{margin-bottom:10px;}
+  .price p{font-size:.95rem;flex:1;}
+  .price .amount{font-size:1.55rem;font-weight:800;color:var(--slate-dark);letter-spacing:-0.01em;}
+  .price .amount small{font-size:.85rem;font-weight:600;color:var(--body);}
+  .sme{
+    margin-top:20px;border:1.5px solid var(--steel);border-radius:8px;padding:26px 28px;background:#fff;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  }
+  .sme h3{margin-bottom:6px;}
+  .sme p{margin:0;font-size:.95rem;max-width:520px;}
+  .sme .amount{font-size:1.7rem;font-weight:800;color:var(--steel);white-space:nowrap;}
+  /* Steps */
+  .steps{list-style:none;counter-reset:step;margin-top:30px;}
+  .steps li{
+    counter-increment:step;display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line);
+  }
+  .steps li:last-child{border-bottom:none;}
+  .steps li::before{
+    content:counter(step);flex:none;width:34px;height:34px;border-radius:50%;
+    background:var(--slate);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.95rem;
+  }
+  .steps strong{color:var(--ink);}
+  .steps p{margin:0;}
+  /* Limits */
+  .limits{border:1px solid var(--line);border-radius:8px;padding:30px 32px;background:#fff;}
+  .limits p:last-child{margin-bottom:0;}
+  /* Contact */
+  .contact{text-align:center;}
+  .contact p{max-width:560px;margin-left:auto;margin-right:auto;}
+  .contact .mail{margin-top:18px;font-size:.98rem;}
+  .contact .mail a{color:var(--steel);font-weight:600;text-decoration:none;}
+  .contact .mail a:hover{text-decoration:underline;}
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:28px 0 36px;background:var(--bg-soft);}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.88rem;}
+  footer .logo{font-size:1rem;}
+  @media (max-width:760px){
+    section{padding:48px 0;}
+    .hero{padding:56px 0 48px;}
+    .hero h1{font-size:1.9rem;}
+    .cards,.prices{grid-template-columns:1fr;}
+    .header-in nav a{margin-left:16px;font-size:.85rem;}
+    .btn.sub{margin-left:0;margin-top:12px;}
+    .hero .cta{display:flex;flex-direction:column;align-items:flex-start;}
+    .sme{flex-direction:column;align-items:flex-start;}
+    .example{padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-in">
+    <a class="logo" href="#top">KANSHO <span>（関証）</span></a>
+    <nav>
+      <a href="#method">Method</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#limits">Limitations</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Verification Infrastructure</p>
+      <h1>A verifiable standard for <span class="accent">sourcing decisions</span> — one you can show to anyone.</h1>
+      <p class="lead">KANSHO replaces gut feel in product sourcing and margin decisions with one shared yardstick, and issues the result as a signed document you can present to trading partners and financial institutions. It is built for e-commerce support providers, wholesalers, and logistics firms — organizations that have to explain their reasoning to their own clients.</p>
+      <div class="cta">
+        <a class="btn" href="#contact">Start with an inquiry</a>
+        <a class="btn sub" href="#method">See how it works</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- What you get -->
+  <section class="band">
+    <div class="wrap">
+      <p class="eyebrow">What You Get</p>
+      <h2>Three deliverables</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="num">01</div>
+          <h3>Verification documents</h3>
+          <p>For each product, profitability is judged across all six items, and the verdict together with its full breakdown is issued as a signed record, in a form you can hand to clients and trading partners.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3>Ongoing audit</h3>
+          <p>As long as sourcing continues, verdicts are repeated on a regular cycle and records are kept in chronological order. When prices or shipping costs change, the product is re-judged — including the difference from the previous verdict.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3>Certificates in your name</h3>
+          <p>Your clients receive the certificate under your name. Each certificate is signed, so anyone can later confirm whether the record is still exactly as issued. During the pilot, we also hand over the verification procedure itself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section id="method">
+    <div class="wrap">
+      <p class="eyebrow">Method</p>
+      <h2>All six items, or no verdict</h2>
+      <p>Every verdict is calculated from these six items. If even one is missing, the calculation does not get to count as “profitable.”</p>
+      <ol class="six">
+        <li>Selling price</li>
+        <li>Product cost <span class="note">(what you pay to source it)</span></li>
+        <li>Shipping</li>
+        <li>Selling fees</li>
+        <li>Returns reserve <span class="note">(an allowance for returned goods)</span></li>
+        <li>Other variable costs</li>
+      </ol>
+      <p>There are only three verdicts:</p>
+      <div class="verdicts">
+        <div class="verdict v-candidate">
+          <div class="v-name">Candidate</div>
+          <p class="v-desc">The conditions are met — profit remains after all six items.</p>
+        </div>
+        <div class="verdict v-hold">
+          <div class="v-name">Hold</div>
+          <p class="v-desc">Inputs are missing, or the conditions are not yet met.</p>
+        </div>
+        <div class="verdict v-reject">
+          <div class="v-name">Reject</div>
+          <p class="v-desc">No profit remains once every cost is counted.</p>
+        </div>
+      </div>
+      <p>Every issued record is signed, so later alteration can be detected. Verification is designed to work without going through the issuer — verification that does not depend on the verifier.</p>
+    </div>
+  </section>
+
+  <!-- Examples -->
+  <section class="band">
+    <div class="wrap">
+      <p class="eyebrow">Worked Examples</p>
+      <h2>How a verdict is reached</h2>
+
+      <div class="example">
+        <h3>Example 1 — Cordless vacuum cleaner</h3>
+        <table>
+          <tr><td>Selling price</td><td>¥24,800</td></tr>
+          <tr><td>Product cost</td><td>¥14,900</td></tr>
+          <tr><td>Shipping</td><td>¥1,480</td></tr>
+          <tr><td>Selling fees</td><td>¥1,240</td></tr>
+          <tr><td>Returns reserve</td><td>¥900</td></tr>
+          <tr><td>Other variable costs</td><td>¥360</td></tr>
+          <tr class="total"><td>Total costs</td><td>¥18,880</td></tr>
+          <tr class="profit"><td>Profit per unit</td><td>¥5,920</td></tr>
+        </table>
+        <div class="verdict-line"><strong>Verdict: Candidate</strong> — Profit remains even with all six items counted, and the conditions are met.</div>
+        <p class="fineprint">* This is a worked example showing how the calculation works. It is not a real client's result.</p>
+      </div>
+
+      <div class="example">
+        <h3>Example 2 — Coffee beans, 1 kg</h3>
+        <table>
+          <tr><td>Selling price</td><td>¥2,980</td></tr>
+          <tr><td>Product cost</td><td>¥1,980</td></tr>
+          <tr><td>Shipping</td><td>¥640</td></tr>
+          <tr><td>Selling fees</td><td>¥298</td></tr>
+          <tr><td>Returns reserve</td><td>¥60</td></tr>
+          <tr><td>Other variable costs</td><td>¥70</td></tr>
+          <tr class="total"><td>Total costs</td><td>¥3,048</td></tr>
+          <tr class="profit"><td>Profit per unit</td><td>−¥68</td></tr>
+        </table>
+        <div class="verdict-line"><strong>Verdict: Reject</strong> — The gap between price and product cost is ¥1,000, but the other costs add up to ¥1,068. Every unit sold loses ¥68.</div>
+        <p class="fineprint">* This is also a worked example, not a real client's result.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing">
+    <div class="wrap">
+      <p class="eyebrow">Pricing</p>
+      <h2>Pricing <span style="font-size:1rem;color:var(--body);font-weight:600;">(provisional, under validation)</span></h2>
+      <div class="prices">
+        <div class="price">
+          <h3>Introductory pilot</h3>
+          <p>The first step. For one of your clients, on a defined set of products, we issue actual verification documents so you can see the process and the document format for yourself.</p>
+          <div class="amount">¥30,000 <small>JPY, fixed</small></div>
+        </div>
+        <div class="price">
+          <h3>Verification document</h3>
+          <p>With the product set and assumptions agreed in advance, we issue one complete verification document for presentation, with the signed record included.</p>
+          <div class="amount">¥100,000 <small>JPY, fixed</small></div>
+        </div>
+        <div class="price">
+          <h3>Ongoing audit</h3>
+          <p>Repeated sourcing verdicts and record-keeping under a monthly arrangement, designed around how often you need re-verification and how many products are covered.</p>
+          <div class="amount">¥100,000 <small>JPY / month, from</small></div>
+        </div>
+      </div>
+
+      <div class="sme">
+        <div>
+          <h3>For small businesses: single-product pilot</h3>
+          <p>If you run a small shop yourself, start with one product. You get the full six-item calculation and the written breakdown document — enough to judge the quality before anything larger.</p>
+        </div>
+        <div class="amount">US$29</div>
+      </div>
+
+      <p class="fineprint">* Prices are provisional settings, currently under validation. A formal quotation is provided individually once the scope is confirmed.</p>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="band">
+    <div class="wrap">
+      <p class="eyebrow">Process</p>
+      <h2>How it proceeds</h2>
+      <ol class="steps">
+        <li>
+          <div>
+            <p><strong>Inquiry</strong> — Tell us, in outline, which products or transactions you want verified, using the contact form below.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p><strong>Introductory pilot</strong> — On a small, defined scope, we take you all the way through to an issued verification document.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p><strong>Ongoing arrangement</strong> — Repeated verdicts and record-keeping are built into your operations as an ongoing audit.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Limitations -->
+  <section id="limits">
+    <div class="wrap">
+      <p class="eyebrow">Honest Limitations</p>
+      <h2>What the signature does — and does not — guarantee</h2>
+      <div class="limits">
+        <p>What KANSHO guarantees is the integrity of the records it issues. The signature makes it possible to detect whether a record has been altered after issuance. It does not guarantee future sales or profit.</p>
+        <p>A verdict is evidence that a calculation was run — “under this calculation, under these conditions, this product passed, or did not pass.” KANSHO does not guarantee profit, and does not sell on your behalf.</p>
+        <p><strong style="color:var(--ink);">KANSHO is a newly launched service and has completed zero engagements so far.</strong> Please judge it on the disclosed method and worked examples — not on a track record it does not yet have.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="band contact">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h2>Start with the product you are unsure about</h2>
+      <p>Send us the outline of the product or transaction you want verified. If any of the six items is missing, we will tell you which one — before any verdict is discussed.</p>
+      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdlsHeNXo6LBiCGHZb7pYVwnbxV2N4n_lHIW-KLTbHXXKrkWQ/viewform" target="_blank" rel="noopener">Open the inquiry form</a>
+      <p class="mail">Or write to us directly: <a href="mailto:camviability@gmail.com">camviability@gmail.com</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top">KANSHO <span>（関証）</span></a>
+    <div>Verification infrastructure for sourcing decisions.</div>
+  </div>
+</footer>
+
+</body>
+</html>
