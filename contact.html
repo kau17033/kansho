@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ご相談｜Outlire（アウトライン）検証基盤</title>
+<meta name="description" content="Outlire（検証文書の発行・継続監査・クライアント提示用の証明）のご相談フォームです。">
+<style>
+  :root{ --slate:#334155; --blue:#2563EB; --red:#B91C1C; --bg:#FFFFFF; --sub:#F8FAFC; --line:#E2E8F0; --ink:#1E293B; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; color:var(--ink); background:var(--bg); line-height:1.8; }
+  header{ background:var(--slate); color:#fff; padding:14px 20px; font-weight:700; letter-spacing:.06em; }
+  header a{ color:#fff; text-decoration:none; }
+  main{ max-width:720px; margin:0 auto; padding:32px 20px 64px; }
+  h1{ font-size:1.5rem; line-height:1.5; margin:16px 0 8px; }
+  .note{ font-size:.85rem; color:#5B6B7F; }
+  label{ display:block; font-weight:700; margin:20px 0 6px; }
+  label .req{ color:var(--red); font-size:.8rem; margin-left:6px; }
+  input[type=text],input[type=email],textarea,select{
+    width:100%; padding:10px 12px; border:1px solid #B6C2CE; border-radius:8px; font-size:1rem; font-family:inherit; background:#fff; }
+  textarea{ min-height:96px; }
+  button{ display:block; width:100%; text-align:center; background:var(--blue); color:#fff; font-weight:700; font-size:1.1rem; padding:16px; border:0; border-radius:10px; margin:32px 0 8px; cursor:pointer; }
+  button:disabled{ opacity:.55; cursor:default; }
+  .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  #done{ display:none; background:var(--sub); border:1px solid var(--line); border-radius:10px; padding:20px; margin:24px 0; }
+  #err{ display:none; color:var(--red); font-weight:700; margin:16px 0; }
+</style>
+</head>
+<body>
+<header><a href="./">Outlire｜検証基盤</a></header>
+<main>
+  <h1>ご相談</h1>
+  <p>検証文書の発行・継続監査・クライアント提示用の証明についてのご相談を受け付けています。送信内容は、回答のためにのみ使います。Outlire が保証するのは記録の同一性であり、将来の利益ではありません。売上の保証、仕入れや販売の代行は行いません。</p>
+
+  <form id="f" novalidate>
+    <label>会社名・組織名<span class="req">必須</span></label>
+    <input type="text" name="company" autocomplete="organization" required>
+
+    <label>担当者名<span class="req">必須</span></label>
+    <input type="text" name="name" autocomplete="name" required>
+
+    <label>返信先メールアドレス<span class="req">必須</span></label>
+    <input type="email" name="email" autocomplete="email" required>
+
+    <label>ご相談の内容<span class="req">必須</span></label>
+    <select name="topic" required>
+      <option value="">選択してください</option>
+      <option>検証文書の発行</option>
+      <option>継続監査</option>
+      <option>クライアント提示用の証明</option>
+      <option>その他</option>
+    </select>
+
+    <label>対象の商品・取引の概要</label>
+    <textarea name="about" placeholder="対象となる商品や取引の概要をお書きください。"></textarea>
+
+    <label>希望時期</label>
+    <input type="text" name="timing" placeholder="例：今月中、来月以降など">
+
+    <label>自由記入</label>
+    <textarea name="message" placeholder="その他、伝えておきたいことがあればお書きください。"></textarea>
+
+    <div class="hp"><label>この欄は入力しないでください<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
+
+    <button type="submit" id="btn">送信する</button>
+  </form>
+
+  <div id="done">
+    <p><strong>送信しました。</strong></p>
+    <p>内容を確認のうえ、返信先メールアドレスへご連絡します。</p>
+  </div>
+  <p id="err">送信できませんでした。入力内容をご確認のうえ、もう一度お試しください。</p>
+</main>
+<script>
+  var ENDPOINT = "https://airg-forms.ki4033322.workers.dev/submit";
+  document.getElementById("f").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var btn = document.getElementById("btn");
+    var err = document.getElementById("err");
+    err.style.display = "none";
+    var fd = new FormData(ev.target);
+    var fields = {};
+    fd.forEach(function (v, k) { if (k !== "hp") fields[k] = v; });
+    if (!fields.company || !fields.name || !fields.email || !fields.topic) {
+      err.textContent = "必須項目（会社名・組織名、担当者名、メールアドレス、ご相談の内容）をご入力ください。";
+      err.style.display = "block";
+      return;
+    }
+    btn.disabled = true;
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ form: "outlire-jp", fields: fields, hp: fd.get("hp") || "" })
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.ok) {
+        ev.target.style.display = "none";
+        document.getElementById("done").style.display = "block";
+        window.scrollTo(0, 0);
+      } else {
+        btn.disabled = false;
+        err.style.display = "block";
+      }
+    }).catch(function () {
+      btn.disabled = false;
+      err.style.display = "block";
+    });
+  });
+</script>
+</body>
+</html>

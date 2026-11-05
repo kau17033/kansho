@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact | Outlire — Verification Infrastructure</title>
+<meta name="description" content="Contact Outlire about verification documents, ongoing audit, and client-ready certificates.">
+<style>
+  :root{ --slate:#334155; --blue:#2563EB; --red:#B91C1C; --bg:#FFFFFF; --sub:#F8FAFC; --line:#E2E8F0; --ink:#1E293B; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; color:var(--ink); background:var(--bg); line-height:1.8; }
+  header{ background:var(--slate); color:#fff; padding:14px 20px; font-weight:700; letter-spacing:.06em; }
+  header a{ color:#fff; text-decoration:none; }
+  main{ max-width:720px; margin:0 auto; padding:32px 20px 64px; }
+  h1{ font-size:1.5rem; line-height:1.5; margin:16px 0 8px; }
+  label{ display:block; font-weight:700; margin:20px 0 6px; }
+  label .req{ color:var(--red); font-size:.8rem; margin-left:6px; }
+  input[type=text],input[type=email],textarea,select{
+    width:100%; padding:10px 12px; border:1px solid #B6C2CE; border-radius:8px; font-size:1rem; font-family:inherit; background:#fff; }
+  textarea{ min-height:96px; }
+  button{ display:block; width:100%; text-align:center; background:var(--blue); color:#fff; font-weight:700; font-size:1.1rem; padding:16px; border:0; border-radius:10px; margin:32px 0 8px; cursor:pointer; }
+  button:disabled{ opacity:.55; cursor:default; }
+  .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  #done{ display:none; background:var(--sub); border:1px solid var(--line); border-radius:10px; padding:20px; margin:24px 0; }
+  #err{ display:none; color:var(--red); font-weight:700; margin:16px 0; }
+</style>
+</head>
+<body>
+<header><a href="./">Outlire | Verification Infrastructure</a></header>
+<main>
+  <h1>Contact</h1>
+  <p>Tell us what you need verified. We reply to the email address you give us, and we use what you send only to answer you. Outlire guarantees the integrity of the record, not future profit. We do not guarantee sales, and we do not buy or sell on your behalf.</p>
+
+  <form id="f" novalidate>
+    <label>Company / organization<span class="req">Required</span></label>
+    <input type="text" name="company" autocomplete="organization" required>
+
+    <label>Your name<span class="req">Required</span></label>
+    <input type="text" name="name" autocomplete="name" required>
+
+    <label>Reply-to email<span class="req">Required</span></label>
+    <input type="email" name="email" autocomplete="email" required>
+
+    <label>Topic<span class="req">Required</span></label>
+    <select name="topic" required>
+      <option value="">Please choose</option>
+      <option>Verification documents</option>
+      <option>Ongoing audit</option>
+      <option>Client-ready certificates</option>
+      <option>Other</option>
+    </select>
+
+    <label>About your products or transactions</label>
+    <textarea name="about" placeholder="A short outline of the products or transactions you want verified."></textarea>
+
+    <label>Preferred timing</label>
+    <input type="text" name="timing" placeholder="e.g. this month, next quarter">
+
+    <label>Message</label>
+    <textarea name="message" placeholder="Anything else we should know."></textarea>
+
+    <div class="hp"><label>Leave this field empty<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
+
+    <button type="submit" id="btn">Send</button>
+  </form>
+
+  <div id="done">
+    <p><strong>Message received.</strong></p>
+    <p>We will review it and reply to the email address you gave us.</p>
+  </div>
+  <p id="err">The message could not be sent. Please check your entries and try again.</p>
+</main>
+<script>
+  var ENDPOINT = "https://airg-forms.ki4033322.workers.dev/submit";
+  document.getElementById("f").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var btn = document.getElementById("btn");
+    var err = document.getElementById("err");
+    err.style.display = "none";
+    var fd = new FormData(ev.target);
+    var fields = {};
+    fd.forEach(function (v, k) { if (k !== "hp") fields[k] = v; });
+    if (!fields.company || !fields.name || !fields.email || !fields.topic) {
+      err.textContent = "Please fill in the required fields (company, name, email, topic).";
+      err.style.display = "block";
+      return;
+    }
+    btn.disabled = true;
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ form: "outlire-en", fields: fields, hp: fd.get("hp") || "" })
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.ok) {
+        ev.target.style.display = "none";
+        document.getElementById("done").style.display = "block";
+        window.scrollTo(0, 0);
+      } else {
+        btn.disabled = false;
+        err.style.display = "block";
+      }
+    }).catch(function () {
+      btn.disabled = false;
+      err.style.display = "block";
+    });
+  });
+</script>
+</body>
+</html>
